@@ -1,9 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  box-sizing: border-box;
 }
 
 a {
@@ -13,4 +16,36 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+.videos::-webkit-scrollbar {
+  width: 0px;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(237, 237, 237);
+  border-radius: 40px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+@layer components {
+  .normalLink {
+    @apply flex justify-center items-center xl:justify-start gap-3 rounded
+           cursor-pointer p-3 hover:bg-primary font-semibold text-pinkColor;
+  }
+  .topic {
+    @apply flex justify-center items-center gap-2 px-3 py-2 rounded xl:rounded-full
+         text-black xl:border-2 xl:border-gray-300 hover:bg-primary cursor-pointer;
+  }
+  .activeTopic {
+    @apply flex justify-center items-center gap-2 px-3 py-2 rounded xl:rounded-full
+         text-pinkColor xl:border-2 xl:border-pinkColor hover:bg-primary cursor-pointer;
+  }
 }
