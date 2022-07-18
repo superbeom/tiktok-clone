@@ -48,4 +48,7 @@ a {
     @apply flex justify-center items-center gap-2 px-3 py-2 rounded xl:rounded-full
          text-pinkColor xl:border-2 xl:border-pinkColor hover:bg-primary cursor-pointer;
   }
+  .play {
+    @apply text-black text-2xl lg:text-4xl;
+  }
 }
