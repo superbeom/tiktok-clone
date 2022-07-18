@@ -7,13 +7,57 @@ import { MdDelete } from "react-icons/md";
 
 import useAuthStore from "../store/authStore";
 import client from "../utils/client";
+import { topics } from "../utils/constants";
 
+// TODO - 로그인되어 있지 않으면 >> 로그인 하라는 안내로 대체해야 함
 const Upload = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [videoAsset, setVideoAsset] = useState<
     undefined | SanityAssetDocument
   >();
-  const [wrongFileType, setWrongFileType] = useState(false);
+  const [wrongFileType, setWrongFileType] = useState<boolean>(false);
+  const [caption, setCaption] = useState<string>("");
+  const [category, setCategory] = useState<string>(topics[0].name);
+  const [savingPost, setSavingPost] = useState<boolean>(false);
+
+  const { userProfile } = useAuthStore();
+
+  const handlePost = async () => {
+    if (videoAsset?._id && caption && category) {
+      setSavingPost(true);
+
+      const document = {
+        _type: "post",
+        caption,
+        video: {
+          _type: "file",
+          asset: {
+            _type: "reference",
+            _ref: videoAsset._id,
+          },
+        },
+        userId: userProfile._id,
+        postedBy: {
+          _type: "postedBy",
+          _ref: userProfile._id,
+        },
+        topic: category,
+      };
+
+      await axios.post("http://localhost:3000/api/post", document);
+
+      router.push("/");
+    }
+  };
+
+  const handleDiscard = () => {
+    setVideoAsset(undefined);
+    setCaption("");
+    setCategory(topics[0].name);
+    setSavingPost(false);
+  };
 
   const uploadVideo = async (e: BaseSyntheticEvent) => {
     const selectedFile = e.target.files[0];
@@ -41,8 +85,8 @@ const Upload = () => {
   };
 
   return (
-    <div className="flex w-full h-full">
-      <div className="bg-white rounded-lg">
+    <div className="flex w-full h-full absolute left-0 top-[60px] mb-10 pt-10 lg:pt-20 bg-lightWhite justify-center">
+      <div className="bg-white rounded-lg flex flex-wrap gap-6 justify-center items-center md:w-[80vw] md:justify-evenly xl:h-[80vh] p-14 pt-6">
         <div>
           <div>
             <p className="text-2xl font-bold">Upload Video</p>
@@ -109,6 +153,52 @@ const Upload = () => {
                 Please select a video file
               </p>
             )}
+          </div>
+        </div>
+        <div className="flex flex-col gap-3 pb-10">
+          <label className="text-md font-medium">Caption</label>
+          <input
+            type="text"
+            value={caption}
+            onChange={(e) => setCaption(e.target.value)}
+            className="rounded outline-red-300 text-md border-2 border-gray-200 p-2"
+          />
+
+          <label className="text-md font-medium">Choose a Category</label>
+          <select
+            name="topic"
+            className="outline-red-300 border-2 border-gray-200 px-2 py-3 rounded capitalize cursor-pointer"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            {topics.map((topic) => (
+              <option key={topic.name} value={topic.name}>
+                {topic.name}
+              </option>
+            ))}
+          </select>
+
+          <div className="flex gap-6 mt-10">
+            <button
+              className="border-gray-300 border-2 text-lg font-medium p-2 rounded w-28 lg:w-44 outline-none"
+              type="button"
+              onClick={handleDiscard}
+            >
+              Discard
+            </button>
+
+            <button
+              className={`${
+                !videoAsset?._id || !caption || !category
+                  ? "bg-gray-300 text-gray-500"
+                  : "bg-pinkColor text-white"
+              } text-lg font-medium p-2 rounded w-28 lg:w-44 outline-none`}
+              type="button"
+              onClick={handlePost}
+              disabled={!videoAsset?._id || !caption || !category}
+            >
+              Post
+            </button>
           </div>
         </div>
       </div>
