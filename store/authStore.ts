@@ -1,6 +1,8 @@
 import create from "zustand";
 import { persist } from "zustand/middleware";
 
+import { User } from "../types";
+
 const authStore = (set: any) => ({
   userProfile: null || {
     _id: "",
@@ -9,7 +11,7 @@ const authStore = (set: any) => ({
     image: "",
   },
 
-  login: (user: any) => set({ userProfile: user }),
+  login: (user: User) => set({ userProfile: user }),
   logout: () => set({ userProfile: null }),
 });
 

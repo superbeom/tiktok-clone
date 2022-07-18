@@ -1,5 +1,6 @@
 const user = `
   _id,
+  _type,
   userName,
   image
 `;
