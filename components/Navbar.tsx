@@ -21,11 +21,9 @@ const Navbar = () => {
     logout,
   }: {
     userProfile: null | User;
-    login: Function;
-    logout: Function;
+    login: (user: User) => any;
+    logout: () => any;
   } = useAuthStore();
-
-  console.log("userProfile: ", userProfile, Boolean(userProfile));
 
   return (
     <div className="flex w-full justify-between items-center border-b-2 border-gray-200 px-4 py-2">

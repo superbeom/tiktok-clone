@@ -2,9 +2,11 @@ import axios from "axios";
 import { CredentialResponse } from "@react-oauth/google";
 import jwt_decode from "jwt-decode";
 
+import { User } from "../types";
+
 export const createOrGetUser = async (
   response: CredentialResponse,
-  login: Function
+  login: (user: User) => any
 ) => {
   try {
     const { credential } = response;

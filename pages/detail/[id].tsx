@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, FormEvent } from "react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -20,12 +20,17 @@ interface IProps {
   postDetails: Video;
 }
 
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH;
+
 const Detail: NextPage<IProps> = ({ postDetails }) => {
   const router = useRouter();
 
   const [post, setPost] = useState<Video>(postDetails);
   const [playing, setPlaying] = useState<boolean>(false);
   const [isVideoMuted, setIsVideoMuted] = useState<boolean>(false);
+  const [comment, setComment] = useState<string>("");
+  const [isPostingComment, setIsPostingComment] = useState<boolean>(false);
+
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const { userProfile } = useAuthStore();
@@ -48,16 +53,31 @@ const Detail: NextPage<IProps> = ({ postDetails }) => {
 
   const toggleLike = async (like: boolean) => {
     if (userProfile) {
-      const { data } = await axios.put(
-        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/like`,
-        {
-          userId: userProfile._id,
-          postId: post._id,
-          like,
-        }
-      );
+      const { data } = await axios.put(`${BASE_PATH}/api/like`, {
+        userId: userProfile._id,
+        postId: post._id,
+        like,
+      });
 
       setPost((curPost) => ({ ...curPost, likes: data.likes }));
+    }
+  };
+
+  const addComment = async (e: FormEvent) => {
+    e.preventDefault();
+
+    if (userProfile && comment) {
+      setIsPostingComment(true);
+
+      const { data } = await axios.put(`${BASE_PATH}/api/post/${post._id}`, {
+        userId: userProfile._id,
+        comment,
+      });
+
+      setPost((curPost) => ({ ...curPost, comments: data.comments }));
+
+      setComment("");
+      setIsPostingComment(false);
     }
   };
 
@@ -110,7 +130,7 @@ const Detail: NextPage<IProps> = ({ postDetails }) => {
       </div>
 
       <div className="relative w-[1000px] md:w-[900px] lg:w-[700px]">
-        <div className="px-5 py-2 mt-10 lg:mt-20 border-2 border-red-700">
+        <div className="px-5 py-2 mt-10 lg:mt-20">
           <div className="flex gap-3 cursor-pointer font-semibold rounded">
             <div className="w-16 h-16 md:w-20 md:h-20">
               <Link href="/">
@@ -152,7 +172,13 @@ const Detail: NextPage<IProps> = ({ postDetails }) => {
             )}
           </div>
 
-          <Comments />
+          <Comments
+            comments={post.comments}
+            comment={comment}
+            setComment={setComment}
+            addComment={addComment}
+            isPostingComment={isPostingComment}
+          />
         </div>
       </div>
     </div>
@@ -166,9 +192,7 @@ export const getServerSideProps = async ({
 }: {
   params: { id: string };
 }) => {
-  const { data } = await axios.get(
-    `${process.env.NEXT_PUBLIC_BASE_PATH}/api/post/${id}`
-  );
+  const { data } = await axios.get(`${BASE_PATH}/api/post/${id}`);
 
   return {
     props: {

@@ -30,7 +30,7 @@ module.exports = {
       colors: {
         primary: "rgb(22, 24, 35)",
         pinkColor: "#F51997",
-        lightWhite: "#F8F8F8",
+        lightWhiteColor: "#F8F8F8",
       },
       height: {
         "88vh": "88vh",
