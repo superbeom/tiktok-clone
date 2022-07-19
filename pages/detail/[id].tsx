@@ -11,6 +11,11 @@ import { HiVolumeUp, HiVolumeOff } from "react-icons/hi";
 
 import { Video } from "../../types";
 
+import useAuthStore from "../../store/authStore";
+
+import LikeButton from "../../components/LikeButton";
+import Comments from "../../components/Comments";
+
 interface IProps {
   postDetails: Video;
 }
@@ -22,6 +27,8 @@ const Detail: NextPage<IProps> = ({ postDetails }) => {
   const [playing, setPlaying] = useState<boolean>(false);
   const [isVideoMuted, setIsVideoMuted] = useState<boolean>(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  const { userProfile } = useAuthStore();
 
   console.log("post: ", post);
 
@@ -84,6 +91,49 @@ const Detail: NextPage<IProps> = ({ postDetails }) => {
               <HiVolumeUp className="whiteIcon" />
             )}
           </button>
+        </div>
+      </div>
+
+      <div className="relative w-[1000px] md:w-[900px] lg:w-[700px]">
+        <div className="px-5 py-2 mt-10 lg:mt-20 border-2 border-red-700">
+          <div className="flex gap-3 cursor-pointer font-semibold rounded">
+            <div className="w-16 h-16 md:w-20 md:h-20">
+              <Link href="/">
+                <>
+                  <Image
+                    className="rounded-full"
+                    width={62}
+                    height={62}
+                    src={post.postedBy.image}
+                    alt={post.postedBy.userName}
+                    layout="responsive"
+                    priority={true}
+                  />
+                </>
+              </Link>
+            </div>
+
+            <div>
+              <Link href="/">
+                <div className="flex flex-col gap-2 mt-3">
+                  <p className="flex gap-2 items-center md:text-md font-bold text-primary">
+                    {post.postedBy.userName}
+                    <GoVerified className="text-blue-400 text-md" />
+                  </p>
+
+                  <p className="capitalize font-medium text-xs text-gray-500 hidden md:block">
+                    {post.postedBy.userName}
+                  </p>
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          <p className="px-5 text-lg text-gray-600">{post.caption}</p>
+
+          <div className="px-10 mt-10">{userProfile && <LikeButton />}</div>
+
+          <Comments />
         </div>
       </div>
     </div>
