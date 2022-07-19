@@ -46,6 +46,21 @@ const Detail: NextPage<IProps> = ({ postDetails }) => {
 
   const closePost = () => router.back();
 
+  const toggleLike = async (like: boolean) => {
+    if (userProfile) {
+      const { data } = await axios.put(
+        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/like`,
+        {
+          userId: userProfile._id,
+          postId: post._id,
+          like,
+        }
+      );
+
+      setPost((curPost) => ({ ...curPost, likes: data.likes }));
+    }
+  };
+
   useEffect(() => {
     if (post && videoRef?.current) {
       videoRef.current.muted = isVideoMuted;
@@ -131,7 +146,11 @@ const Detail: NextPage<IProps> = ({ postDetails }) => {
 
           <p className="px-5 text-lg text-gray-600">{post.caption}</p>
 
-          <div className="px-10 mt-10">{userProfile && <LikeButton />}</div>
+          <div className="px-10 mt-10">
+            {userProfile && (
+              <LikeButton likes={post.likes} toggleLike={toggleLike} />
+            )}
+          </div>
 
           <Comments />
         </div>
