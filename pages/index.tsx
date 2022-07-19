@@ -9,19 +9,15 @@ interface IProps {
   videos: Video[];
 }
 
-const Home = ({ videos }: IProps) => {
-  console.log("videos: ", videos);
-
-  return (
-    <div className="videos flex flex-col h-full gap-10">
-      {videos.length ? (
-        videos.map((video: Video) => <VideoCard key={video._id} post={video} />)
-      ) : (
-        <NoResults text="No Videos" />
-      )}
-    </div>
-  );
-};
+const Home = ({ videos }: IProps) => (
+  <div className="videos flex flex-col h-full gap-10">
+    {videos.length ? (
+      videos.map((video: Video) => <VideoCard key={video._id} post={video} />)
+    ) : (
+      <NoResults text="No Videos" />
+    )}
+  </div>
+);
 
 export default Home;
 

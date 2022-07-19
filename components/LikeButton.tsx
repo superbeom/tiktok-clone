@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { MdFavorite } from "react-icons/md";
 
+import { PostedBy } from "../types";
+
 import useAuthStore from "../store/authStore";
 
 interface IProps {
-  likes: any[];
+  likes: PostedBy[];
   toggleLike: (like: boolean) => Promise<void>;
 }
 

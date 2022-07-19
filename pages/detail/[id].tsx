@@ -35,8 +35,6 @@ const Detail: NextPage<IProps> = ({ postDetails }) => {
 
   const { userProfile } = useAuthStore();
 
-  console.log("post: ", post);
-
   const toggleMute = (type: boolean) => setIsVideoMuted(type);
 
   const togglePlay = () => {

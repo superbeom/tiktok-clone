@@ -5,6 +5,11 @@ export interface User {
   image: string;
 }
 
+export interface PostedBy extends User {
+  _ref: string;
+  _type: string;
+}
+
 export interface Video {
   _id: string;
   caption: string;
@@ -15,11 +20,11 @@ export interface Video {
     };
   };
   userId: string;
-  postedBy: User;
-  likes: User[];
+  postedBy: PostedBy;
+  likes: PostedBy[];
   comments: {
     comment: string;
     _key: string;
-    postedBy: User;
+    postedBy: PostedBy;
   }[];
 }

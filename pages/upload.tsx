@@ -66,8 +66,6 @@ const Upload = () => {
     const selectedFile = e.target.files[0];
     const fileTypes = ["video/mp4", "video/webm", "video/ogg"];
 
-    console.log("selectedFile: ", selectedFile);
-
     if (fileTypes.includes(selectedFile.type)) {
       setIsLoading(true);
       setWrongFileType(false);
@@ -76,8 +74,6 @@ const Upload = () => {
         contentType: selectedFile.type,
         filename: selectedFile.name,
       });
-
-      console.log("imageAsset: ", imageAsset);
 
       setVideoAsset(imageAsset);
       setIsLoading(false);
