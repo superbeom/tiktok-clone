@@ -20,15 +20,17 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     <GoogleOAuthProvider
       clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}
     >
-      <Navbar />
+      <div className="xl:w-[1200px] m-auto overflow-hidden h-[100vh]">
+        <Navbar />
 
-      <div className="flex gap-6 md:gap-20">
-        <div className="h-[92vh] overflow-hidden xl:hover:overflow-auto">
-          <Sidebar />
-        </div>
+        <div className="flex gap-6 md:gap-20">
+          <div className="h-[92vh] overflow-hidden xl:hover:overflow-auto">
+            <Sidebar />
+          </div>
 
-        <div className="flex flex-col flex-1 h-[88vh] gap-10 overflow-auto mt-4 videos">
-          <Component {...pageProps} />
+          <div className="flex flex-col flex-1 h-[88vh] gap-10 overflow-auto mt-4 videos">
+            <Component {...pageProps} />
+          </div>
         </div>
       </div>
     </GoogleOAuthProvider>

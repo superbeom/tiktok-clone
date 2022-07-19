@@ -1,5 +1,4 @@
-import React, { useState, useRef } from "react";
-import { NextPage } from "next";
+import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { GoVerified } from "react-icons/go";
@@ -12,7 +11,7 @@ interface IProps {
   post: Video;
 }
 
-const VideoCard: NextPage<IProps> = ({ post }) => {
+const VideoCard = ({ post }: IProps) => {
   const [isHover, setIsHover] = useState<boolean>(false);
   const [playing, setPlaying] = useState<boolean>(false);
   const [isVideoMuted, setIsVideoMuted] = useState<boolean>(false);
@@ -30,6 +29,12 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
       setPlaying(true);
     }
   };
+
+  useEffect(() => {
+    if (videoRef?.current) {
+      videoRef.current.muted = isVideoMuted;
+    }
+  }, [isVideoMuted]);
 
   return (
     <div className="flex flex-col border-b-2 border-gray-200 pb-6">
@@ -73,7 +78,7 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
           onMouseLeave={() => toggleHover(false)}
           className="rounded-3xl"
         >
-          <Link href="/">
+          <Link href={`/detail/${post._id}`}>
             <video
               ref={videoRef}
               loop
@@ -86,17 +91,17 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
             <div className="absolute bottom-6 cursor-pointer left-8 md:left-14 lg:left-0 flex gap-10 lg:justify-between w-[100px] md:w-[50px] p-3">
               <button onClick={togglePlay}>
                 {playing ? (
-                  <BsFillPauseFill className="play" />
+                  <BsFillPauseFill className="icon" />
                 ) : (
-                  <BsFillPlayFill className="play" />
+                  <BsFillPlayFill className="icon" />
                 )}
               </button>
 
               <button onClick={() => toggleMute(isVideoMuted ? false : true)}>
                 {isVideoMuted ? (
-                  <HiVolumeOff className="play" />
+                  <HiVolumeOff className="icon" />
                 ) : (
-                  <HiVolumeUp className="play" />
+                  <HiVolumeUp className="icon" />
                 )}
               </button>
             </div>

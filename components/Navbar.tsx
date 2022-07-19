@@ -36,6 +36,7 @@ const Navbar = () => {
             src={Logo}
             alt="logo"
             layout="responsive"
+            priority={true}
           />
         </div>
       </Link>

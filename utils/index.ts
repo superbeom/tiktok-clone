@@ -25,7 +25,7 @@ export const createOrGetUser = async (
     login(user);
 
     await axios
-      .post("http://localhost:3000/api/auth", user)
+      .post(`${process.env.NEXT_PUBLIC_BASE_PATH}/api/auth`, user)
       .catch((error) =>
         console.log(
           "@Error createOrGetUser - utils: ",
