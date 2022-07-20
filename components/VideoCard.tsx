@@ -38,39 +38,31 @@ const VideoCard = ({ post }: IProps) => {
 
   return (
     <div className="flex flex-col border-b-2 border-gray-200 pb-6">
-      <div>
-        <div className="flex gap-3 p-2 cursor-pointer font-semibold rounded">
+      <Link href={`/profile/${post.userId}`}>
+        <div className="flex gap-3 p-2 rounded cursor-pointer">
           <div className="w-10 h-10 md:w-16 md:h-16">
-            <Link href="/">
-              <>
-                <Image
-                  className="rounded-full"
-                  width={62}
-                  height={62}
-                  src={post.postedBy.image}
-                  alt={post.postedBy.userName}
-                  layout="responsive"
-                />
-              </>
-            </Link>
+            <Image
+              className="rounded-full"
+              width={62}
+              height={62}
+              src={post.postedBy.image}
+              alt={post.postedBy.userName}
+              layout="responsive"
+            />
           </div>
 
-          <div>
-            <Link href="/">
-              <div className="flex items-center gap-2">
-                <p className="flex gap-2 items-center font-bold text-primary">
-                  {post.postedBy.userName}
-                  <GoVerified className="text-blue-400 text-sm" />
-                </p>
+          <div className="flex flex-col items-start gap-2">
+            <p className="flex gap-2 items-center font-bold text-primary">
+              {post.postedBy.userName}
+              <GoVerified className="text-blue-400 text-sm" />
+            </p>
 
-                <p className="capitalize font-medium text-xs text-gray-500 hidden md:block">
-                  {post.postedBy.userName}
-                </p>
-              </div>
-            </Link>
+            <p className="capitalize font-medium text-xs text-gray-500 hidden md:block">
+              {post.postedBy.userName}
+            </p>
           </div>
         </div>
-      </div>
+      </Link>
 
       <div className="lg:ml-20 flex gap-4 relative">
         <div
