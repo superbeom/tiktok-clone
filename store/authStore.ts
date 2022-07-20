@@ -4,26 +4,30 @@ import axios from "axios";
 
 import { User } from "../types";
 
-const authStore = (set: any) => ({
-  userProfile: null || {
-    _id: "",
-    _type: "",
-    userName: "",
-    image: "",
-  },
-  allUsers: [],
+interface AuthState {
+  userProfile: User | null;
+  allUsers: User[] | never[];
+  login: (user: User) => void;
+  logout: () => void;
+  fetchAllUsers: () => Promise<void>;
+}
 
-  login: (user: User) => set({ userProfile: user }),
-  logout: () => set({ userProfile: null }),
+const authStore = (set: any) =>
+  <AuthState>{
+    userProfile: null,
+    allUsers: [],
 
-  fetchAllUsers: async () => {
-    const { data } = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_PATH}/api/users`
-    );
+    login: (user: User) => set({ userProfile: user }),
+    logout: () => set({ userProfile: null }),
 
-    set({ allUsers: data });
-  },
-});
+    fetchAllUsers: async () => {
+      const { data }: { data: User[] } = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_PATH}/api/users`
+      );
+
+      set({ allUsers: data });
+    },
+  };
 
 const useAuthStore = create(
   persist(authStore, {
