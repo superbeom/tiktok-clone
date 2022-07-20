@@ -21,14 +21,30 @@ const Home = ({ videos }: IProps) => (
 
 export default Home;
 
-export const getServerSideProps = async () => {
-  const { data } = await axios.get(
-    `${process.env.NEXT_PUBLIC_BASE_PATH}/api/post`
-  );
+export const getServerSideProps = async ({
+  query: { topic },
+}: {
+  query: { topic: string };
+}) => {
+  let videos;
+
+  if (topic) {
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_PATH}/api/discover/${topic}`
+    );
+
+    videos = data ?? [];
+  } else {
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_PATH}/api/post`
+    );
+
+    videos = data;
+  }
 
   return {
     props: {
-      videos: data,
+      videos,
     },
   };
 };
